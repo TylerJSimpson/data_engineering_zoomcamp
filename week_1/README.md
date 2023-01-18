@@ -12,6 +12,7 @@ Python pipeline script to be called by docker image
 ## Docker: Postgres image
 
 Using MINGW64 Git Bash on Windows
+Note that if there is another local Postgres instance port 5432 will likely need to be changed
 
 ```bash
 winpty docker run -it  \
