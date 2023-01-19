@@ -90,3 +90,28 @@ Now there are 2 containers:
 A docker network must be created to link the 2 containers.  
 
 ## Docker: Create network  
+Create network.  
+```bash
+winpty docker network create pg-network
+```  
+Add Postgres image.  
+```bash
+winpty docker run it - \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v /c:/git/data-engineering-zoomcamp/week_1/2_docker_sql/ny_taxi_postgres_data:/var/lib/postgresql/data \
+  -p 5432:5432 \
+  --network=pg-network \
+  --name pg-database \
+```
+Add PGadmin image.  
+```bash
+winpty docker run -it \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  --network=pg-network \
+  --name pgadmin2 \
+  -p 8080:80 \
+  dpage/pgadmin4
+```
