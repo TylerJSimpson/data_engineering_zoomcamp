@@ -104,6 +104,7 @@ winpty docker run it - \
   -p 5432:5432 \
   --network=pg-network \
   --name pg-database \
+  postgres:13
 ```
 Add PGadmin image.  
 ```bash
