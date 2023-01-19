@@ -10,7 +10,7 @@ In this case this docker image is for python that utilizes a pipeline.py pipelin
 Python pipeline script to be called by docker image.  
 [Pipeline.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/pipeline.py)
 
-## Docker: Postgres booting image
+## Docker: Create Postgres image
 
 Create and run Postgres image.
 
@@ -68,4 +68,14 @@ SELECT COUNT(*) FROM yellow_taxi_data;
 Returns 1,369,765 records as expected.  
 ```sql
 SELECT * FROM yellow_taxi_data LIMIT 1;
+```
+## Docker: Create PGadmin image
+
+Create and run PGadmin image.  
+```bash
+winpty docker run -it \
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -p 8080:80 \
+  dpage/pgadmin4
 ```
