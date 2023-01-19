@@ -1,3 +1,5 @@
+# Week 1: Docker, GCP, and Terraform
+
 *Windows 10 and MINGW64 Git Bash used*
 ## Dockerfile creation
 
@@ -79,3 +81,12 @@ winpty docker run -it \
   -p 8080:80 \
   dpage/pgadmin4
 ```
+Search in browser: localhost:8080 and login with credentials specified.  
+  
+Now there are 2 containers:   
+* container with Postgres running
+* container with PGadmin running  
+  
+A docker network must be created to link the 2 containers.  
+
+## Docker: Create network  
