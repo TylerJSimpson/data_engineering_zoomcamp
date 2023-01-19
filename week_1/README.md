@@ -1,8 +1,8 @@
-
+*Windows 10 and MINGW64 Git Bash used*
 ## Dockerfile creation
 
 Creates an image for Docker.  
-In this case this docker image is for python that utilizes a pipeline.py python pipeline script.  
+In this case this docker image is for python that utilizes a pipeline.py pipeline script.  
 [Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/Dockerfile)
 
 ## Python Pipeline creation
@@ -12,7 +12,7 @@ Python pipeline script to be called by docker image.
 
 ## Docker: Postgres booting image
 
-Note that if there is another local Postgres instance port 5432 will likely need to be changed.  
+Create and run Postgres image.
 
 ```bash
 winpty docker run -it  \
@@ -23,7 +23,6 @@ winpty docker run -it  \
   -p 5432:5432 \
   postgres:13
 ```
-Docker postgres instance now running.  
 
 ## Docker: Postgres connecting to image
 Install dependencies.  
@@ -54,7 +53,8 @@ Utilizing Jupyter Notebook.
 ```bash
 jupyter notebook
 ```
-See code in notebook [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb). Due to the size of the csv data this python code creates a table in postgres and appends data in batches of 100,000 records each.  
+See code in notebook [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb).  
+Due to the size of the csv data this python code creates a table in Postgres and appends data in batches of 100,000 records each.  
 
 ## Docker: Explore appended data in Postgres
 Establish connection as above.  
