@@ -1,13 +1,13 @@
 
 ## Dockerfile creation
 
-Creates an image for Docker  
-In this case this docker image is for python that utilizes a pipeline.py python pipeline script  
+Creates an image for Docker.  
+In this case this docker image is for python that utilizes a pipeline.py python pipeline script.  
 [Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/Dockerfile)
 
 ## Python Pipeline creation
 
-Python pipeline script to be called by docker image  
+Python pipeline script to be called by docker image.  
 [Pipeline.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/pipeline.py)
 
 ## Docker: Postgres booting image
