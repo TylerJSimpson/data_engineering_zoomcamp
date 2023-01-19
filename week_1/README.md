@@ -37,7 +37,7 @@ Establish connection.
 winpty pgcli -h localhost -p 5432 -u root -d ny_taxi
 ```
 
-## Docker: Download data
+## Download data
 Using NYC cab data from [repo](https://github.com/DataTalksClub/nyc-tlc-data/releases/tag/yellow).  
 Download data from January 2021 from repo.  
 
@@ -49,7 +49,23 @@ Explore data.
 wc -l yellow_tripdata_2021-01.csv 
 winpty head -n 100 yellow_tripdata_2021-01.csv 
 ```
-## Docker: Jupyter Notebook
+## Python EDA and docker prep
+Utilizing Jupyter Notebook.  
 ```bash
 jupyter notebook
+```
+See code in notebook [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb). Due to the size of the csv data this python code creates a table in postgres and appends data in batches of 100,000 records each.  
+
+## Docker: Explore appended data in Postgres
+Establish connection as above.  
+```bash
+winpty pgcli -h localhost -p 5432 -u root -d ny_taxi
+```
+Check to see all data has been appended and looks correct.  
+```sql
+SELECT COUNT(*) FROM yellow_taxi_data;
+```
+Returns 1,369,765 records as expected.  
+```sql
+SELECT * FROM yellow_taxi_data LIMIT 1;
 ```
