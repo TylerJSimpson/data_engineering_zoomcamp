@@ -126,4 +126,45 @@ Convert to script:
 winpty jupyter nbconvert --to=script upload-data.ipynb
 ```  
 Clean up script and add argparse arguments and parameters:  
-[ingest_data.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/ingest_data.py)
+[ingest_data.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/ingest_data.py)  
+
+Test ingestion of pipeline into docker.  
+```bash
+URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+winpty python ingest_data.py \
+  --user=root \
+  --password=root \
+  --host=localhost \
+  --port=5432 \
+  --db=ny_taxi \
+  --table_name=yellow_taxi_trips \
+  --url=${URL}
+```  
+
+## Dockerfile creation
+
+Creates an image for Docker including the dependencies for Postgres, PGadmin, and the ingest_data.py script from the last step.     
+[Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/Dockerfile)  
+
+## Docker: Combine everything
+Build new image.  
+```bash
+docker build -t taxi_ingest:v001 .
+``` 
+Run previous script in the network.  
+--network needs added and --host must be changed from localhost now that this is on a network.  
+```bash
+URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+winpty docker run -it \
+  --network=pg-network \
+  taxi_ingest:v001 \
+    --user=root \
+    --password=root \
+    --host=pg-database \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_trips \
+    --url=${URL}
+```  
