@@ -96,7 +96,7 @@ winpty docker network create pg-network
 ```  
 Add Postgres image.  
 ```bash
-winpty docker run it - \
+winpty docker run -it \
   -e POSTGRES_USER="root" \
   -e POSTGRES_PASSWORD="root" \
   -e POSTGRES_DB="ny_taxi" \
@@ -115,4 +115,15 @@ winpty docker run -it \
   --name pgadmin2 \
   -p 8080:80 \
   dpage/pgadmin4
-```
+```  
+
+## Convert python notebook to script
+ipynb exploratory notebook developed previously:  
+[upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb)  
+  
+Convert to script:  
+```bash
+winpty jupyter nbconvert --to=script upload-data.ipynb
+```  
+Clean up script and add argparse arguments and parameters:  
+[ingest_data.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/ingest_data.py)
