@@ -1,17 +1,5 @@
 # Week 1: Docker, GCP, and Terraform
 
-*Windows 10 and MINGW64 Git Bash used*
-## Dockerfile creation
-
-Creates an image for Docker.  
-In this case this docker image is for python that utilizes a pipeline.py pipeline script.  
-[Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/Dockerfile)
-
-## Python Pipeline creation
-
-Python pipeline script to be called by docker image.  
-[Pipeline.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/pipeline.py)
-
 ## Docker: Create Postgres image
 
 Create and run Postgres image.
