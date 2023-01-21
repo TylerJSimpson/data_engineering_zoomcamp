@@ -1,4 +1,4 @@
-# Week 1: Docker, GCP, and Terraform
+# Week 1: Docker, GCP, and Terraform 
 
 ## Docker: Create Postgres image
 
@@ -129,13 +129,23 @@ winpty python ingest_data.py \
   --table_name=yellow_taxi_trips \
   --url=${URL}
 ```  
+Added zones data to [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb) after the fact.  
+```python
+import pandas as pd
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://root:root@localhost:5432/ny_taxi')
+engine.connect()
+!wget https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv
+df_zones = pd.read_csv('taxi+_zone_lookup.csv')
+df_zones.to_sql(name='zones', con=engine, if_exists='replace')
+```  
 
 ## Dockerfile creation
 
 Creates an image for Docker including the dependencies for Postgres, PGadmin, and the ingest_data.py script from the last step.     
 [Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/Dockerfile)  
 
-## Docker: Combine everything
+## Docker Compose: Combine Postgres and PGadmin images
 Build new image.  
 ```bash
 docker build -t taxi_ingest:v001 .
@@ -156,3 +166,54 @@ winpty docker run -it \
     --table_name=yellow_taxi_trips \
     --url=${URL}
 ```  
+Create docker compose file:  
+[docker-compose.yaml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/docker-compose.yaml)  
+Execute:  
+```bash
+docker-compose up
+``` 
+## SQL in Postgres  
+### Join [yellow_taxi_trips] and [zones]  
+```sql
+/* Join [yellow_taxi_trips] and [zones] */
+
+SELECT	tpep_pickup_datetime,
+  	tpep_dropoff_datetime,
+  	total_amount,
+  	CONCAT(zpu."Borough", ' / ', zpu."Zone")    AS "pickup_loc",
+  	CONCAT(zdo."Borough", ' / ' , zpu."Zone")   AS "dropoff_loc"
+FROM	yellow_taxi_trips t 
+	JOIN zones zpu
+  		ON t."PULocationID" = zpu."LocationID"
+	JOIN zones zdo
+  		ON t."DOLocationID" = zdo."LocationID"
+LIMIT   100;
+```  
+### Check for clean data   
+1. Check for data without pickup or dropoff locations:
+```sql
+/* Check for data without a pickup or dropoff location */
+SELECT	tpep_pickup_datetime,
+  	tpep_dropoff_datetime,
+  	total_amount,
+  	"PULocationID",
+  	"DOLocationID"
+FROM	yellow_taxi_trips t
+WHERE	"DOLocationID" is NULL --replace with "PULocationID" to check null pickup locations
+LIMIT   100;
+```  
+There are no missing pickup or dropoff locations.  
+  
+2. Check for pickup and dropoff locations not present in the zones table
+```sql
+/* Check for dropoff and pickup locations not present in [zones] */
+SELECT	tpep_pickup_datetime,
+  	tpep_dropoff_datetime,
+  	total_amount,
+  	"PULocationID",
+  	"DOLocationID"
+FROM	yellow_taxi_trips t
+WHERE   "DOLocationID" NOT IN (SELECT "LocationID" FROM zones) -- replace with "PULocationID" to check if pickup locations are not in the zones table
+LIMIT 	100;
+```  
+There are no missing locations.  
