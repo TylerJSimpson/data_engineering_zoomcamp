@@ -1,8 +1,20 @@
 # Week 1: Docker, GCP, and Terraform 
 
-## Docker: Create Postgres image
+# Table of contents
+1. [Docker](#Docker)
+2. [Terraform & GCP](#Terraform_GCP)
+    1. [Sub paragraph](#subparagraph1)
+3. [Another paragraph](#paragraph2)
 
-Create and run Postgres image.
+## Section 1: Docker <a name="Docker"></a>
+
+### Docker compile Postgres and PGadmin containers in a network to allow for GUI interaction with database. Python data pipeline container feeding the Postgres database.
+
+
+
+## Docker: Postgres image
+
+### Create and run Postgres image.
 
 ```bash
 winpty docker run -it  \
@@ -14,7 +26,7 @@ winpty docker run -it  \
   postgres:13
 ```
 
-## Docker: Postgres connecting to image
+### Connect to Postgres image.  
 Install dependencies.  
 ```bash
 pip install pgcli
@@ -26,7 +38,12 @@ Establish connection.
 winpty pgcli -h localhost -p 5432 -u root -d ny_taxi
 ```
 
-## Download data
+
+
+## Docker: Python data pipeline feed to Postgres
+
+### Download and explore data
+
 Using NYC cab data from [repo](https://github.com/DataTalksClub/nyc-tlc-data/releases/tag/yellow).  
 Download data from January 2021 from repo.  
 
@@ -38,26 +55,66 @@ Explore data.
 wc -l yellow_tripdata_2021-01.csv 
 winpty head -n 100 yellow_tripdata_2021-01.csv 
 ```
-## Python EDA and docker prep
-Utilizing Jupyter Notebook.  
+### Python EDA and docker prep
+
+Open Jupyter Notebook.  
+
 ```bash
 jupyter notebook
-```
-See code in notebook [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb).  
+```  
+
+Develop code in notebook [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb).  
 Due to the size of the csv data this python code creates a table in Postgres and appends data in batches of 100,000 records each.  
 
-## Docker: Explore appended data in Postgres
-Establish connection as above.  
+### Convert python notebook to script
+ipynb exploratory notebook developed previously:  
+[upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb)  
+  
+Convert to script:  
+```bash
+winpty jupyter nbconvert --to=script upload-data.ipynb
+```  
+Clean up script and add argparse arguments and parameters:  
+[ingest_data.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/ingest_data.py)  
+
+Test ingestion of pipeline into docker.  
+```bash
+URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+winpty python ingest_data.py \
+  --user=root \
+  --password=root \
+  --host=localhost \
+  --port=5432 \
+  --db=ny_taxi \
+  --table_name=yellow_taxi_trips \
+  --url=${URL}
+```  
+Added zones data to [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb) after the fact. This portion is not active in the Docker compile file mentioned later.  
+```python
+import pandas as pd
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://root:root@localhost:5432/ny_taxi')
+engine.connect()
+!wget https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv
+df_zones = pd.read_csv('taxi+_zone_lookup.csv')
+df_zones.to_sql(name='zones', con=engine, if_exists='replace')
+```  
+### Explore appended data in Postgres
+Establish connection.  
 ```bash
 winpty pgcli -h localhost -p 5432 -u root -d ny_taxi
 ```
 Check to see all data has been appended and looks correct.  
 ```sql
-SELECT COUNT(*) FROM yellow_taxi_data;
+SELECT	COUNT(*) 
+FROM 	yellow_taxi_data;
 ```
 Returns 1,369,765 records as expected.  
 ```sql
-SELECT * FROM yellow_taxi_data LIMIT 1;
+SELECT	* 
+FROM 	yellow_taxi_data 
+LIMIT 	1;
 ```
 ## Docker: Create PGadmin image
 
@@ -105,52 +162,22 @@ winpty docker run -it \
   dpage/pgadmin4
 ```  
 
-## Convert python notebook to script
-ipynb exploratory notebook developed previously:  
-[upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb)  
-  
-Convert to script:  
-```bash
-winpty jupyter nbconvert --to=script upload-data.ipynb
-```  
-Clean up script and add argparse arguments and parameters:  
-[ingest_data.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/ingest_data.py)  
 
-Test ingestion of pipeline into docker.  
-```bash
-URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
 
-winpty python ingest_data.py \
-  --user=root \
-  --password=root \
-  --host=localhost \
-  --port=5432 \
-  --db=ny_taxi \
-  --table_name=yellow_taxi_trips \
-  --url=${URL}
-```  
-Added zones data to [upload-data.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/upload-data.ipynb) after the fact.  
-```python
-import pandas as pd
-from sqlalchemy import create_engine
-engine = create_engine('postgresql://root:root@localhost:5432/ny_taxi')
-engine.connect()
-!wget https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv
-df_zones = pd.read_csv('taxi+_zone_lookup.csv')
-df_zones.to_sql(name='zones', con=engine, if_exists='replace')
-```  
+## Dockerfile and Coker Compose creation
 
-## Dockerfile creation
+### Dockerfile creation
 
-Creates an image for Docker including the dependencies for Postgres, PGadmin, and the ingest_data.py script from the last step.     
+Creates an image for Docker including the dependencies for Postgres, PGadmin, and the ingest_data.py script.     
 [Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_1/Dockerfile)  
 
-## Docker Compose: Combine Postgres and PGadmin images
+### Docker Compose creation
+Combine Postgres image, PGadmin image, and python data pipeline image into a single docker compose instance.  
 Build new image.  
 ```bash
 docker build -t taxi_ingest:v001 .
 ``` 
-Run previous script in the network.  
+Run build in the network.  
 --network needs added and --host must be changed from localhost now that this is on a network.  
 ```bash
 URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
@@ -172,7 +199,7 @@ Execute:
 ```bash
 docker-compose up
 ``` 
-## SQL in Postgres  
+## Postgres SQL development in PGadmin 
 ### Join [yellow_taxi_trips] and [zones]  
 ```sql
 /* Join [yellow_taxi_trips] and [zones] */
@@ -217,3 +244,16 @@ WHERE   "DOLocationID" NOT IN (SELECT "LocationID" FROM zones) -- replace with "
 LIMIT 	100;
 ```  
 There are no missing locations.  
+
+
+
+## Section 2: Terraform & GCP <a name="Terraform_GCP"></a>
+
+### Placeholder description.  
+
+
+
+## Installations
+
+Download and install [terraform](https://www.terraform.io/) and ensure PATH is set.  
+Download and install [GCP](https://cloud.google.com/sdk/docs/install).  
