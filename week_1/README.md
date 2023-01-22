@@ -165,7 +165,7 @@ winpty docker run -it \
 
 
 
-## Dockerfile and Coker Compose creation
+## Dockerfile and Docker Compose creation
 
 ### Dockerfile creation
 
