@@ -327,3 +327,60 @@ To save money please remember to delete the resources.
 terraform destroy
 ```
 
+## GCP VM setup  
+
+Enable VM API.  
+
+  
+### SSH  
+
+Create SSH key for login.  
+Move to SSH directory (or create it).  
+Generate SSH key.
+```bash
+ssh-keygen -t rsa -f gcp -C tjsimpson -b 2048
+```  
+
+Print public key to use in GCP.  
+```bash
+cat gcp.pub
+```  
+
+Access VM locally.  
+```bash
+ssh -i /c/Users/"Tyler Simpson"/.ssh/gcp tjsimpson@{EXTERNAL_IP}
+```  
+
+To access more easily create a config file allowing for easier calling.  
+
+Check specs.  
+```bash
+htop
+```  
+
+### Configure instance software.  
+1. Download and install Anaconda.  
+```bash
+wget https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh
+```  
+```bash
+bash Anaconda3-2022.10-Linux-x86_64.sh
+``` 
+Ensure Anaconda intialize on startup.  
+```bash
+less .bashrc
+```  
+  
+*Note sometimes windows doesn't close ssh.exe. To fix this open Command Promp and run taskkill /F /IM ssh.exe*  
+  
+2. Download and install Docker.  
+  
+Update packages.  
+```bash
+sudo apt-get update
+```  
+Install.  
+```bash
+sudo apt-get install docker.io
+```  
+*Note setting up Remote - SSH in VS code will allow remote development*  
