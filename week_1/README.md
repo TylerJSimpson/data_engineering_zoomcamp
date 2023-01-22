@@ -1,16 +1,17 @@
 # Week 1: Docker, GCP, and Terraform 
 
-# Table of contents
-1. [Docker](#Docker)
-2. [Terraform & GCP](#Terraform_GCP)
-    1. [Sub paragraph](#subparagraph1)
-3. [Another paragraph](#paragraph2)
+Table of contents
+=================
 
-## Section 1: Docker <a name="Docker"></a>
+<!--ts-->
+   * [Docker](#docker)
+   * [Terraform_and_GCP](#terraform_and_gcp)
+<!--te-->
+
+Docker
+=================
 
 ### Docker compile Postgres and PGadmin containers in a network to allow for GUI interaction with database. Python data pipeline container feeding the Postgres database.
-
-
 
 ## Docker: Postgres image
 
@@ -245,15 +246,83 @@ LIMIT 	100;
 ```  
 There are no missing locations.  
 
+Terraform_and_GCP
+=================
+
+### Installation and setup of GCP, GCP SDK, and Terraform. Building BigQuery and Google Cloud Storage (GCS) infrastructure using Terraform.
+
+## GCP SDK setup
+
+Download and install [GCP SDK](https://cloud.google.com/sdk/docs/install) and ensure PATH is set.  
+Be sure the PATH is set for the python.exe that will be used.  
+  
+Link GCP SDK to account key.  
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS="C:\git\data-engineering-zoomcamp\week_1\gcp\dtc-de-0315-7c3955b32bd3.json"
+```  
+  
+Authenticate using OAuth.  
+```bash
+gcloud auth application-default login
+```  
+  
+Add quota project.  
+```bash
+gcloud auth application-default set-quota-project {PROJECT ID HIDDEN}
+```  
+  
+Link GCP SDK to project.  
+```bash
+PROJECT_NAME="{PROJECT ID HIDDEN}"
+gcloud auth application-default set-quota-project ${PROJECT_NAME}
+```  
+
+Grant service account IAM permissions in GUI:  
+* Storage Admin  
+* Storage Object Admin  
+* BigQuery Admin  
+
+Enable [IAM API access](https://console.cloud.google.com/apis/library/iam.googleapis.com)  
+Enable [IAM secive account credentials API](https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com)  
 
 
-## Section 2: Terraform & GCP <a name="Terraform_GCP"></a>
+## Terraform GCP infrastructure creation  
 
-### Placeholder description.  
-
-
-
-## Installations
-
+Infrastructure to be created:
+* Create GCP infrastructure modules.
+* Google Cloud Storage (GCS): Data Lake
+* BigQuery: Data Warehouse
+  
 Download and install [terraform](https://www.terraform.io/) and ensure PATH is set.  
-Download and install [GCP](https://cloud.google.com/sdk/docs/install).  
+
+
+Create [Terraform folder](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/terraform) to house files:  
+Create file [main.tf](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/terraform/main.tf).  
+Create file [variables.tf](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/terraform/variables.tf).  
+Please note that in this variables.tf file setup the project ID is passed at runtime.  
+
+Refresh GCP credentials with OAuth.  
+```bash
+gcloud auth application-default login
+```
+
+Initialize terraform from [Terraform folder](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/terraform).  
+```bash
+terraform init
+```
+
+Plan setup and review details.  
+```bash
+terraform plan
+```
+
+Build all GCP resources.  
+```bash
+terraform apply
+```
+
+To save money please remember to delete the resources.  
+```bash
+terraform destroy
+```
+
