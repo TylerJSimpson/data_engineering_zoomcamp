@@ -296,17 +296,18 @@ Infrastructure to be created:
 Download and install [terraform](https://www.terraform.io/) and ensure PATH is set.  
 
 
-Create [Terraform folder](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/terraform) to house files:  
-Create file [main.tf](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/terraform/main.tf).  
-Create file [variables.tf](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/terraform/variables.tf).  
-Please note that in this variables.tf file setup the project ID is passed at runtime.  
+Create [Terraform folder](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_1/terraform) to house files:  
+* Create file [main.tf](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_1/terraform/main.tf)  
+* Create file [variables.tf](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_1/terraform/variables.tf)  
+  
+*Please note that in this variables.tf file setup the project ID is passed at runtime.*  
 
 Refresh GCP credentials with OAuth.  
 ```bash
 gcloud auth application-default login
 ```
 
-Initialize terraform from [Terraform folder](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/terraform).  
+Initialize terraform from [Terraform folder](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_1/terraform).  
 ```bash
 terraform init
 ```
