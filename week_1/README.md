@@ -383,4 +383,128 @@ Install.
 ```bash
 sudo apt-get install docker.io
 ```  
-*Note setting up Remote - SSH in VS code will allow remote development*  
+Clone data-engineering-zoomcamp repo.  
+
+```bash
+git clone https://github.com/DataTalksClub/data-engineering-zoomcamp.git
+```  
+Run Docker commands without Sudo.  
+```bash
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+sudo service docker restart
+``` 
+Donwload most recent Ubuntu.  
+```bash
+docker run -it ubuntu bash
+``` 
+3. Download and install Docker Compose.  
+Create bin directory for executable files.  
+```bash
+mkdir bin
+``` 
+Download in bin directory.  
+```bash
+wget https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-linux-x86_64 -O docker-compose
+``` 
+Execute docker-compose (change mode needed).  
+```bash
+chmod +x docker-compose
+``` 
+Add this to path so it is usable from any location.  
+Change directory to home.  
+```bash
+nano .bashrc 
+``` 
+Append the following text:  
+export PATH="${HOME}/bin:${PATH}"  
+Now docker commands can be executed from anywhere.  
+
+4. Download and install Docker PGadmin and Postgres images.  
+
+Change to week_1_basics_n_setup/2_docker_sql directory.  
+Download images for PGadmin and Postgres.  
+```bash
+docker-compose up -d
+``` 
+Check to be sure they're installed.  
+```bash
+docker ps
+``` 
+5. Download and install PGCLI (2 options).  
+Install PGCLI.  
+```bash
+pip install pgcli
+``` 
+Connect to database.  
+```bash
+pgcli -h localhost -U root -d ny_taxi
+``` 
+Port forwarding.  
+Use VS Code remote environment terminal.  
+**PORTS** -> **FORWARD PORT** -> 5432  
+**PORTS** -> **FORWARD PORT** -> 8080  
+**PORTS** -> **FORWARD PORT** -> 8888  
+*8888 is for Jupyter Notebook later*  
+Now you can access the same from local computer (due to port 5432).  
+```bash
+pgcli -h localhost -U root -d ny_taxi
+```  
+Now you can also access PGadmin via localhost:8080 in browser (due to port 8080).  
+
+5. Download and install Jupyter Notebook.  
+
+Change to week_1_basics_n_setup/2_docker_sql directory.  
+Download data.  
+```bash
+wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz
+```  
+
+```bash
+jupyter notebook
+```  
+Copy a link into the browser.  
+Test that data is being written into the database.  
+
+6. Download and install Terraform.  
+Go to bin directory.  
+```bash
+wget https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip
+```  
+Unzip package.  
+
+Change to week_1_basics_n_setup/1_terraform_gcp/terraform directory.  
+```bash
+wget https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip
+```  
+
+Now the JSON GCP key needs to be xfered using SFTP.  
+Go to directory that houses JSON file.  
+```bash
+sftp -i /c/Users/simps/.ssh/gcp tjsimpson@{HIDDEN}
+```  
+Create a new directory .gc and put file.  
+
+In .../1_terraform_gcp/terraform path.  
+
+7. Configure gcloud  
+```bash
+export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/{HIDDEN}.json
+```  
+```bash
+gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+```  
+Install Terraform.  
+```bash
+terraform init
+```  
+Set plan.  
+```bash
+terraform plan
+```  
+Enter GCP project ID.  
+Apply plan.  
+```bash
+terraform apply
+```  
+
