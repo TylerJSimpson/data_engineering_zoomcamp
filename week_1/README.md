@@ -483,7 +483,7 @@ Create a new directory .gc and put file.
 
 In .../1_terraform_gcp/terraform path.  
 
-#### 8. Configure gcloud  
+#### 8. Configure gcloud and initialize/apply Terraform  
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/{HIDDEN}.json
 ```  
