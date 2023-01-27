@@ -359,7 +359,7 @@ htop
 ```  
 
 ### Configure instance software.  
-1. Download and install Anaconda.  
+#### 1. Download and install Anaconda.  
 ```bash
 wget https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh
 ```  
@@ -373,7 +373,7 @@ less .bashrc
   
 *Note sometimes windows doesn't close ssh.exe. To fix this open Command Promp and run taskkill /F /IM ssh.exe*  
   
-2. Download and install Docker.  
+#### 2. Download and install Docker.  
   
 Update packages.  
 ```bash
@@ -398,7 +398,7 @@ Donwload most recent Ubuntu.
 ```bash
 docker run -it ubuntu bash
 ``` 
-3. Download and install Docker Compose.  
+#### 3. Download and install Docker Compose.  
 Create bin directory for executable files.  
 ```bash
 mkdir bin
@@ -420,7 +420,7 @@ Append the following text:
 export PATH="${HOME}/bin:${PATH}"  
 Now docker commands can be executed from anywhere.  
 
-4. Download and install Docker PGadmin and Postgres images.  
+#### 4. Download and install Docker PGadmin and Postgres images.  
 
 Change to week_1_basics_n_setup/2_docker_sql directory.  
 Download images for PGadmin and Postgres.  
@@ -431,7 +431,7 @@ Check to be sure they're installed.
 ```bash
 docker ps
 ``` 
-5. Download and install PGCLI (2 options).  
+#### 5. Download and install PGCLI (2 options).  
 Install PGCLI.  
 ```bash
 pip install pgcli
@@ -452,7 +452,7 @@ pgcli -h localhost -U root -d ny_taxi
 ```  
 Now you can also access PGadmin via localhost:8080 in browser (due to port 8080).  
 
-5. Download and install Jupyter Notebook.  
+#### 6. Download and install Jupyter Notebook.  
 
 Change to week_1_basics_n_setup/2_docker_sql directory.  
 Download data.  
@@ -466,7 +466,7 @@ jupyter notebook
 Copy a link into the browser.  
 Test that data is being written into the database.  
 
-6. Download and install Terraform.  
+#### 7. Download and install Terraform.  
 Go to bin directory.  
 ```bash
 wget https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip
@@ -483,7 +483,7 @@ Create a new directory .gc and put file.
 
 In .../1_terraform_gcp/terraform path.  
 
-7. Configure gcloud  
+#### 8. Configure gcloud  
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/{HIDDEN}.json
 ```  
