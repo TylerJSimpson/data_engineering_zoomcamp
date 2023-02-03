@@ -13,7 +13,7 @@ Prefect_Pipeline_Web_to_GCS
 
 Connect to VM.  
 ```bash
-ssh -i /c/Users/simps/.ssh/gcp tjsimpson@34.86.191.246
+ssh -i /c/Users/simps/.ssh/gcp tjsimpson@{hidden}
 ```
 
 Authenticate gcloud via OAuth.  
@@ -90,6 +90,18 @@ python flows/02_gcp/etl_web_to_gcs.py
 ```
 
 Can check flow runs in Prefect and can see the data in GCS.  
+
+Create [rides] table in [BigQuery](https://console.cloud.google.com/bigquery).  
+
+Create Prefect flow to gather data from GCS (data lake) and insert into bigquery.  
+[etl_gcs_to_bq.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_2/etl_gcs_to_bq.py)  
+Include destination_table and project_id from BigQuery for integration.  
+
+Run python pipeline.  
+```bash
+python flows/02_gcp/etl_web_to_gcs.py
+```
+Check BigQuery to be sure data has loaded successfully after receiving a success message.
 
 
 Placeholder2
