@@ -445,7 +445,9 @@ Use VS Code remote environment terminal.
 **PORTS** -> **FORWARD PORT** -> 5432  
 **PORTS** -> **FORWARD PORT** -> 8080  
 **PORTS** -> **FORWARD PORT** -> 8888  
+**PORTS** -> **FORWARD PORT** -> 4200  
 *8888 is for Jupyter Notebook later*  
+*4200 is for Prefect later*  
 Now you can access the same from local computer (due to port 5432).  
 ```bash
 pgcli -h localhost -U root -d ny_taxi
