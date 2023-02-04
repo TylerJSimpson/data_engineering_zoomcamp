@@ -1,32 +1,32 @@
 # Week 2: Prefect - Workflow Automation
 
-Table of contents
-=================
+## General Setup
 
-<!--ts-->
-   * [Placeholder_1](#Prefect_Pipeline_Web_to_GCS)
-   * [Placeholder_2](#placeholder2)
-<!--te-->
+### Connect to VM
 
-Prefect_Pipeline_Web_to_GCS
-=================
-
-Connect to VM.  
+Use bash script or connect via VScode.
 ```bash
 ssh -i /c/Users/simps/.ssh/gcp tjsimpson@{hidden}
 ```
+### Forward the necessary ports in VScode
+PORTS -> FORWARD PORT -> 5432  
+PORTS -> FORWARD PORT -> 8080  
+PORTS -> FORWARD PORT -> 8888  
+PORTS -> FORWARD PORT -> 4200  
 
-Authenticate gcloud via OAuth.  
+
+### Authenticate gcloud via OAuth.  
 ```bash
 gcloud auth application-default login
 ```
 
+### Clone this week's git repo
 Move to /week_2_workflow_orchestration/  
 
-Clone git repository.  
 ```bash
 git clone https://github.com/discdiver/prefect-zoomcamp.git
 ```
+### Create and activate Conda environment with requirements
 
 Move to /week_2_workflow_orchestration/prefect-zoomcamp/  
 
@@ -35,7 +35,7 @@ Create Conda environment.
 conda create -n zoom python=3.9
 ```
 
-Connec to environment.  
+Connect to environment.  
 ```bash
 conda activate zoom
 ```
@@ -44,6 +44,10 @@ Install requirements.
 ```bash
 pip install -r requirements.txt
 ```
+
+## Prefect
+
+### Prefect Setup
 
 Install Prefect.  
 ```bash
@@ -64,21 +68,23 @@ Prefect can be accessed by clicking the link generated upon running this script.
 prefect orion start
 ```
 
-Create Prefect block in the GUI.  
+**Create Prefect block in the GUI.**  
 Block Name: zoom-gcs  
 Bucket (from GCS): dtc_data_lake_dtc-de-0315  
 
-Create Prefect GCP Credentials using service account.  
+**Create Prefect GCP Credentials using service account.**  
 Block Name: zoom-gcp-creds  
 Add GCP service account json key.  
 Now add this credential to the optional credential portion of the GSC bucket block.  
 Create.  
-The python code will need to be added to the python pipeline code.  
+The python code will need to be added to the python pipeline code written in the next step.  
 
 ```python
 from prefect_gcp.cloud_storage import GcsBucket
 gcp_cloud_storage_bucket_block = GcsBucket.load("zoom-gcs")
 ```
+
+### Prefect Pipeline: ETL data from the web to GCS
 
 Create Prefect flow to gather web data and store it in GCS:  
 [etl_web_to_gcs.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_2/etl_web_to_gcs.py)  
@@ -91,6 +97,8 @@ python flows/02_gcp/etl_web_to_gcs.py
 
 Can check flow runs in Prefect and can see the data in GCS.  
 
+### Prefect Pipeline: ETL data from GCS to BigQuery
+
 Create [rides] table in [BigQuery](https://console.cloud.google.com/bigquery).  
 
 Create Prefect flow to gather data from GCS (data lake) and insert into bigquery.  
@@ -102,6 +110,8 @@ Run python pipeline.
 python flows/02_gcp/etl_web_to_gcs.py
 ```
 Check BigQuery to be sure data has loaded successfully after receiving a success message.
+
+### Prefect Pipeline: Parameterize
 
 Parameterize the previous pipelines into a parent pipeline.  
 [parameterized_flow.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_2/parameterized_flow.py)  
@@ -143,6 +153,10 @@ Example code below will create a new deployment that runs every day at 12:00 AM.
 prefect deployment build ./parameterized_flow.py:etl_parent_flow -n "Parameterized ETL" --cron "0 0 * * *" -a
 ```
 
+## Docker
+
+### Docker Setup
+
 Saving flow code as docker container to productionize.  
 
 Create [Dockerfile](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_2/Dockerfile)  
@@ -173,6 +187,7 @@ from prefect.infrastructure.docker import DockerContainer
 
 docker_container_block = DockerContainer.load("zoom")
 ```
+### Docker Image: Prefect Pipeline
 
 Create prefect pipeline flow deployment via python.  
 [docker_deploy.py](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_2/docker-deploy.py)  
@@ -201,6 +216,3 @@ Run flow and overide parameter months with just 1 and 2.
 ```bash
 prefect deployment run etl-parent-flow/docker-flow -p "months=[1,2]"
 ```
-
-Placeholder2
-=================
