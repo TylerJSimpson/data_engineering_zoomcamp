@@ -130,6 +130,6 @@ Value field has 8 asterisks.
 
 How many characters are shown as asterisks (*) on the next page of the UI?  
 
-- **8**
+- **8**  
 
-
+*Note I am deleting my flows/02_gcp path once this is graded*
