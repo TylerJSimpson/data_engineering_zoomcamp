@@ -21,8 +21,10 @@ I am using the dbt cloud account (free for 1 developer) for BigQuery.
 * Link GitHub, create new repository if necessary  
 * Initialize Project  
 * Edit dbt_project.yaml name: 'taxi_rides_ny', update the name under models section to match, delete models/example/portion    
+* Under models folder create models/staging and models/core  
 
 ## dbt Basics  
+### Compiling
 Note that dbt uses a python language Jinja which it compiles and runs in the data warehouse.  
 Eample:
 ```sql
@@ -44,6 +46,53 @@ CREATE TABLE my_schema.my_model AS
   WHERE   record_State = 'ACTIVE'
 )
 ```
+### FROM clause
+Transformation are done in select statements.  
+Select statements have FROM clause like below:  
+```sql
+FROM  {{ source('staging','yellow_tripdate_2021_01') }}
+```
+These sources are defined in a yaml file which the models call from:  
+```yml
+sources:
+    - name: staging
+      database: production
+      schema: trips_data_all
 
+      loaded_at_field: record_loaded_at
+      tables:
+        - name: green_tripdata
+        - name: yellow_tripdata
+          freshness:
+            error_after: {count: 6, period: hour}
+```
+Inside the source there is a freshness clause.  
+As above you could run a freshness check that would check if data is fresh within the last 6 hours.  
+  
+You can also upload CSV stored in your repository under the seed folder.  
+Seeds can be ran as:  
+```bash
+dbt seed -s file_name
+```
 
+You can also use references to reference underlying tables and views to automatically build dependencies and resolve the schema.  
+```sql
+--dbt sql model
+WITH  green_data AS (
+      SELECT  *,
+              'Green' AS service_type
+      FROM    {{ ref('stg_green_tripdata') }}
+),
+```
+
+```sql
+--compiled code
+WITH  green_data AS (
+      SELECT  *,
+              'Green' AS service_type
+      FROM    "my_project"."dbt_dev"."stg_green_tripdata"
+),
+```
 ## dbt model development
+Open project in dbt.  
+Create models/staging/stg_green_tripdata.sql  
