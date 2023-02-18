@@ -93,6 +93,149 @@ WITH  green_data AS (
       FROM    "my_project"."dbt_dev"."stg_green_tripdata"
 ),
 ```
-## dbt model development
+## dbt development
+### Models
 Open project in dbt.  
 Create models/staging/stg_green_tripdata.sql  
+Create schema.yml in models/staging to take advantage of references instead of using a basic FROM statement.  
+```yml
+# schema.yml
+version: 2
+
+sources:
+    - name: staging
+      database: dtc-de-0315
+      schema: trips_data_all
+
+      tables:
+          - name: green_tripdata_partitoned
+          - name: yellow_tripdata_partitoned
+```
+Create first model referencing this schema.yml.  
+```sql
+{{ config(materialized='view') }}
+
+SELECT  *
+FROM    {{ source('staging','green_tripdata_partitoned') }}
+LIMIT   100
+```
+Run the model in the dbt terminal.  
+```bash
+dbt run
+```
+*Note my spelling error 'partitoned' as opposed to 'partitioned', I did not feel like updating all my tables names and rolled with it*  
+
+### Macros
+* Use control structures in SQL
+* Use environment variables in your dbt project for production deployments
+* Operates on the results of one query to generate another query
+* Abstract snippets of SQL into reusable macros  
+
+Create new file in macros:  
+marcos/get_payment_type_description.sql  
+Add defintion:  
+```sql
+{# This macro returns the description of the payment_type #}
+
+{% macro get_payment_type_description(payment_type) %}
+
+    CASE  {{ payment_type }}
+          WHEN 1 THEN 'Credit card'
+          WHEN 2 THEN 'Cash'
+          WHEN 3 THEN 'No charge'
+          WHEN 4 THEN 'Dispute'
+          WHEN 5 THEN 'Unknown'
+          WHEN 6 THEN 'Voided trip'
+    END
+
+{% endmacro %}
+```
+How to use the macro:  
+```sql
+SELECT  {{ get_payment_type_description('payment-type') }} AS payment_type_description
+FROM    {{ source('staging','green_tripdata_partitoned') }}
+WHERE   vendorid IS NOT NULL
+```
+How macro is compiled:  
+```sql
+SELECT  CASE  {{ payment_type }}
+              WHEN 1 THEN 'Credit card'
+              WHEN 2 THEN 'Cash'
+              WHEN 3 THEN 'No charge'
+              WHEN 4 THEN 'Dispute'
+              WHEN 5 THEN 'Unknown'
+              WHEN 6 THEN 'Voided trip'
+        END AS payment_type_description,
+        congestion_surcharge::double precision
+FROM    {{ source('staging','green_tripdata') }}
+WHERE    vendorid IS NOT NULL
+```
+
+### Packages 
+* Similar to libraries in python
+* Standalone dbt projects, with their own models and macros
+* If you add a package to your project the package's models and macros will become a part of your project
+* Imported in packages.yml file and by running 'dbt deps'
+* A list of useful packages can be found at [dbt package hub](https://hub.getdbt.com/)
+
+Create new file in root under project folder packages.yml  
+  
+packages.yml contents:
+```sql
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 0.8.0
+```
+
+Run command in dbt cloud to install:  
+```bash
+dbt deps
+```
+
+You can check what was installed under dbt_packages/dbt_utils  
+
+Call it as a jinja function:  
+```sql
+{{ config(materialized='view') }}
+
+SELECT  {{ dbt_utils.surrogate_key(['vendorid', 'lpep_pickup_datetime']) }} AS tripid
+FROM    {{ source('staging','green_tripdata_partitoned') }}
+WHERE   vendorid IS NOT NULL
+```
+
+### Variables
+* Useful for defining valuables that should be used across the project
+* allows us to provide data to models for compilation
+* can be defined in 2 ways
+    * in the dbt_project.yml file
+    * on the command line  
+
+Adding a variable for LIMIT 100 in our stg_green_tripdata.sql:  
+```sql
+{{ config(materialized='view') }}
+
+SELECT  *
+FROM    {{ source('staging','green_tripdata_partitoned') }}
+WHERE   vendorid IS NOT NULL
+{% if var('is_test_run', default=true) %}
+
+    LIMIT 100
+
+{% endif %}
+```
+```bash
+dbt run
+```
+Note this defaults to TRUE and uses LIMIT 100  
+We can set the var to false:  
+```bash
+dbt run --select stg_green_tripdata --var 'is_test_run:false'
+```
+
+## Putting it all together
+
+### yellow and green tripdata
+
+models/staging/[schema.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/staging.yml)  
+models/staging/[stg_green_tripdata.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/stg_green_tripdata.sql)  
+models/staging/[stg_yellow_tripdata.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/stg_yellow_tripdata.sql)  
