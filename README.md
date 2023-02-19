@@ -4,5 +4,5 @@
 * **[Week 1](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_1)** - **Docker** (Postgres, PGadmin, Python), **GCP** (GCS, BigQuery, VM), and **Terraform**
 * **[Week 2](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_2)** - **Workflow Orchestration** (GCS, BigQuery Prefect, Docker)
 * **[Week 3](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_3)** - **Data Warehousing** (BigQuery)
-* **[Week 4](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_4)** - **Analytics Engineering** (BigQuery, DBT)
+* **[Week 4](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_4)** - **Analytics Engineering** (dbt, BigQuery, Looker)
 ### Final Project
