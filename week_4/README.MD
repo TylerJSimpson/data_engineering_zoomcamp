@@ -232,10 +232,114 @@ We can set the var to false:
 dbt run --select stg_green_tripdata --var 'is_test_run:false'
 ```
 
-## Putting it all together
+### Seeds
+You can use CSV files in your respositories as tables  
+Create [seeds/taxi_zone_lookup.csv]()  
+Copy from [source](https://github.com/DataTalksClub/data-engineering-zoomcamp/edit/main/week_4_analytics_engineering/taxi_rides_ny/data/taxi_zone_lookup.csv).  
+Run dbt seed to create table:  
+```bash
+dbt seed
+```
+You can overwrite the dbt decided column types by adding them into the dbt_project.yml as below:  
+```yml
+seeds:
+  taxi_rides_ny:
+    taxi_zone_lookup:
+      -column types:
+        locationid: numeric
+```
+If values have been added to the CSV a full refresh is needed:  
+```bash
+dbt seed --full-refresh
+```
 
-### yellow and green tripdata
+Lets create a model from this CSV in core:  
+models/core/dim_zones.sql  
+
+```sql
+{{ config(materialized='table') }}
+
+
+SELECT  locationid, 
+        borough, 
+        zone, 
+        REPLACE(service_zone,'Boro','Green') AS service_zone
+FROM    {{ ref('taxi_zone_lookup') }}
+```
+
+Note 'dbt run' will not run seeds if you want to run everything including seeds use 'dbt build'  
+
+### Tests and Documentation
+#### Tests
+* Assumptions that we make about our data
+* Tests in dbt are essentially a select sql query
+* Assumptions get compiled to sql that returns the amount of failing records vs the assumption
+* Tests are defined in a column in the .yml file
+* dbt provides basic tests:
+  * Unique
+  * Not null
+  * Accepted values
+  * A foreign key to another table
+* You can create custom tests
+#### Documentation
+* dbt provides aw ay to generate documentation for your dbt project and render it as a website
+* Documentation includes:
+  * model code
+  * model dependencies
+  * sources
+  * auto generated DAG from the ref and source macros
+  * descriptions and tests
+  * column names and data types
+  * table stats like size and rows
+
+For examples see the documentation and testing created in the schema.yml files below:  
+models/staging/[schema.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/staging.yml)  
+models/core/[schema.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/core/schema.yml)
+
+### Deployment
+* Version control and CI/CD
+* Running models created in the development environment in a production environment
+* A deployment environment will normally have a different schema and ideally a different user
+* Development-Deployment workflow
+  * Develop in a user branch
+  * Open a PR to merge into the main branch
+  * Merge the branch to the main branch
+  * Run the new models in the production environment using the main branch
+  * Schedule the models
+* dbt cloud includes a scheduler to create jobs
+  * A single job can run multiple commands
+  * Jobs can be triggered manually or on a schedule
+  * Each job will keep a log of the runs over time
+  * Each run will have the logs of each command
+  * Jobs can also generate documentation that can be viewed under the run information
+  * If dbt source freshness was run, the results can also be viewed at the end of a job
+* dbt allows us to enable CI on pull requests
+  * enabled via webhooks from GitHub or GitLab
+  * When a PR is ready to be merged, a webhook is received in dbt cloud that will queue a new run of the specified job
+  * The run of the CI job will be against a temporary schema
+  * No PR will be able to be merged unless the run has been completed successfully  
+
+In dbt cloud under project environments create a production environment.  
+Previously everything was done in the development environment.  
+Create the first job.  
+Note the scheduling, CI/CD, and other features mentioned above.  
+You can schedule multiple tasks ie:  
+```bash
+dbt seed
+dbt run
+dbt test
+```
+Once complete, save and run the job.  
+
+## Putting it all together
 
 models/staging/[schema.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/staging.yml)  
 models/staging/[stg_green_tripdata.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/stg_green_tripdata.sql)  
 models/staging/[stg_yellow_tripdata.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/stg_yellow_tripdata.sql)  
+models/core/[schema.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/core/schema.yml)
+models/core/[dim_zones.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/core/dim_zones.sql)  
+models/core/[fact_trips.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/core/fact_trips.sql)  
+models/core/[dim_monthly_zone_revenue.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/core/dim_monthly_zone_revenue.sql)  
+[dbt_project.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/dbt_project.yml)  
+
+
