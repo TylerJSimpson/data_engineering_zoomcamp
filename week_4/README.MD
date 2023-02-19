@@ -1,5 +1,5 @@
-# Week 4: Analytics Engineering - BigQuery, DBT
-Setting up dbt cloud for a BigQuery data warehouse, creating a project, developing and deploying the models to production.  
+# Week 4: Analytics Engineering - BigQuery, DBT, Looker
+Setting up dbt cloud for a BigQuery data warehouse, creating a project, developing and deploying the models to production. Visualizing the data using Looker.    
 
 ## Setup
 I am using the dbt cloud account (free for 1 developer) for BigQuery.
@@ -331,7 +331,7 @@ dbt test
 ```
 Once complete, save and run the job.  
 
-## Putting it all together
+### Putting it all together
 
 models/staging/[schema.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/staging.yml)  
 models/staging/[stg_green_tripdata.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/staging/stg_green_tripdata.sql)  
@@ -342,4 +342,12 @@ models/core/[fact_trips.sql](https://github.com/TylerJSimpson/data_engineering_z
 models/core/[dim_monthly_zone_revenue.sql](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/models/core/dim_monthly_zone_revenue.sql)  
 [dbt_project.yml](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_4/dbt_project.yml)  
 
-
+## Visualization: Looker
+Going to visualize the main fact table.  
+In data sources choose BigQuery.  
+DTC-DE/production/fact_trips  
+Change default aggregations as necessary.  
+Changing these to NULL:  
+dropoff_locationid, pickup_locationid, ratecodeid, payment type, trip type, vendorid  
+Create report.  
+Please see an [example report](https://lookerstudio.google.com/s/kfnV1LcxmcI) created with the data.  
