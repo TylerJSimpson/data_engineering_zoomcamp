@@ -1,4 +1,4 @@
-# Week 5: Batch Processing - Kafka, Spark
+# Week 5: Batch Processing - Spark
 Placeholder
 
 ## Placeholder
