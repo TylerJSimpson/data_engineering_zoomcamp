@@ -5,4 +5,5 @@
 * **[Week 2](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_2)** - **Workflow Orchestration** (GCS, BigQuery Prefect, Docker)
 * **[Week 3](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_3)** - **Data Warehousing** (BigQuery)
 * **[Week 4](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_4)** - **Analytics Engineering** (dbt, BigQuery, Looker)
+* **[Week 5](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_5)** - **Batch Processing** (Spark)  
 ### Final Project
