@@ -1,8 +1,8 @@
 # Week 5: Batch Processing - Spark
-Placeholder
+Overview of setting up Spark, Spark fundamentals/internals, and using PySpark and Spark SQL for processing.  
 
-## Setup  
-
+## Setup Spark  
+This is an overview of setting up Spark on a Linux VM.  
 ### Install Java
 Note that new version of JDK wont work with spark (current version 17+ in 2023).  
 Make a new directory at ls ~ for spark and pre-requisites.  
@@ -81,7 +81,7 @@ Save for startup.
 source .bashrc
 ```
 
-## PySpark
+## PySpark & Spark SQL Overview
 
 ### Setup
 Ensure that **port 8888** is open because we will use Jupyter to interact with Pyspark.  
@@ -99,10 +99,10 @@ Run Jupyter.
 jupyter notebook
 ```
 Use a token code generated to access in browser.  
-See jupyter notebook with pyspark [pyspark_01_test.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/pyspark_01_test.ipynb).  
+See jupyter notebook with pyspark [spark_01_test.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/spark_01_test.ipynb).  
 
 ### Introduction
-Follow along in the notebook [pyspark_02_intro.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/pyspark_02_intro.ipynb)  
+Follow along in the notebook [spark_02_intro.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/spark_02_intro.ipynb)  
   
 This notebook covers:
 * Spark Introduction
@@ -111,4 +111,6 @@ This notebook covers:
 Note that prior to Spark SQL the following must be ran:  
 Run script [download_data.sh](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/download_data.sh)  * Note that you will need to run this for TAXI_TYPE yellow & green and for YEAR 2020 & 2021  
 Run notebook [taxi_schema.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/taxi_schema.ipynb)  
+
+
 
