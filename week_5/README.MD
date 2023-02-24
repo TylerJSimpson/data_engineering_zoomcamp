@@ -87,18 +87,28 @@ source .bashrc
 Ensure that **port 8888** is open because we will use Jupyter to interact with Pyspark.  
 **port 4040** can optionally be opened that will show all Spark jobs.  
 
-Add PySpark to the PYTHONPATH.  
+Add PySpark to the PYTHONPATH add this to .bashrc as well.  
 Please ensure the py4j below matches what is in ${SPARK_HOME}/python/lib  
 ```bash
 export PYTHONPATH="${SPARK_HOME}/python/:$PYTHONPATH"
 export PYTHONPATH="${SPARK_HOME}/python/lib/py4j-0.10.9.5-src.zip:$PYTHONPATH"
 ```
 
-### Testing
 Run Jupyter.  
 ```bash
 jupyter notebook
 ```
 Use a token code generated to access in browser.  
-See test jupyter notebook with pyspark [pyspark_test.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/pyspark_test.ipynb).  
+See jupyter notebook with pyspark [pyspark_01_test.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/pyspark_01_test.ipynb).  
+
+### Introduction
+Follow along in the notebook [pyspark_02_intro.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/pyspark_02_intro.ipynb)  
+  
+This notebook covers:
+* Spark Introduction
+* Spark Dataframes
+* Spark SQL  
+Note that prior to Spark SQL the following must be ran:  
+Run script [download_data.sh](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/download_data.sh)  * Note that you will need to run this for TAXI_TYPE yellow & green and for YEAR 2020 & 2021  
+Run notebook [taxi_schema.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/taxi_schema.ipynb)  
 
