@@ -1,4 +1,5 @@
 # Week 1: Docker, GCP, and Terraform 
+This week is the setup of Postgres, Docker, GCP, and GCP infrastructure (GCS, Bigquery) on Terraform. We will create basic ETL pipelines in python pulling data from Postgres. We will create a Terraform infrastructure package to deploy GCP infrastructure including GCS and BigQuery. We will set up a GCP Linux VM. Finally we will use docker to package our pipelines in a vnet with the dependencies and terraform infrastructure to deploy on the GCP Linux VM.  
 
 Table of contents
 =================
