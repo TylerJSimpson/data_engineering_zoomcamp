@@ -1,5 +1,5 @@
 # Week 3: Data Warehousing - BigQuery
-
+Reviewing the basics of BigQuery. This includes cost and performance optimization and ingesting data from object storage as external tables and the effects of partitioning and clustering data. Finally some of the supported internal machine learning is explored.  
 ## BigQuery: Best Practices
 
 ### Cost reduction
