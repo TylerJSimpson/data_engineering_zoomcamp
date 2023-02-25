@@ -112,5 +112,33 @@ Note that prior to Spark SQL the following must be ran:
 Run script [download_data.sh](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/download_data.sh)  * Note that you will need to run this for TAXI_TYPE yellow & green and for YEAR 2020 & 2021  
 Run notebook [taxi_schema.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/taxi_schema.ipynb)  
 
+### Internals
+
+#### Anatomy of a Spark Cluster
+* A cluster contains a Master that receives the spark-submit from our computer. In our case this was via port 4040.  
+* A cluster also contains executors which are the computers doing the execution.  
+* Each executor pulls a partition of the dataframe (downloads it on the executor computer) and once the task/partition is complete it picks up another until they are all done.  
+* Many times now the spark cluster and the lake where the dataframes are stored are in the same data center.  
+
+#### Group By
+Stage 1:  
+* The executors do filtering (ie nothing before 2020) and then the group producing many intermediate results.  
+Stage 2:  
+* These intermediate results produced by each partition then must be grouped again.  
+* This process is called reshuffling which is an external merge sort algorithm.  
+* Records from the same partition are merged together by this method.  
+Stage 3:  
+* Partition records are grouped together to a single result.  
+
+#### Joins
+* First data is read and grouped as previously.  
+* Each partition has a composite key dependent on the number of columns followed by the data.  
+* Key, Data where if you are joining on 'hour' and 'zone' the key will combine 'hour' and 'zone'.  
+* Reshuffling then happens (external merge sort algorithm). 1st partition receives all Key1, 2nd receives all Key2, etc.  
+* Partition 1 can also receive Key4 etc as long as all matching keys are in a partition.  
+* Now depending on the type of join partitions are filtered out.  
+In the case of 1 table being very large and the other being very small respective to eachother:  
+* Each partition of the large table goes to an executor 1 by 1 as previously.  
+* For the small table a copy is created in EACH executor so no shuffling is needed.  
 
 
