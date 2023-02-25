@@ -1,5 +1,5 @@
 # Week 2: Prefect - Workflow Automation
-
+Prefect is a python workflow and data pipeline automation tool born out of Airflow. We will setup Prefect and develop pipelines from source to object store and from object store to datawarehouse. We will also paramaterize the pipelines and deploy them in Docker.  
 ## General Setup
 
 ### Connect to VM
