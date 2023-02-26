@@ -21,7 +21,7 @@ Output: **3.3.1**
 
 What's the size of the folder with results (in MB)?
 
-Code can be found here .  
+Code can be found here [week5_homework.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/homework/week5_homework.ipynb).  
 
 ```bash
 du -h
@@ -34,7 +34,7 @@ How many taxi trips were there on February 15?
 
 Consider only trips that started on February 15.
 
-Code can be found here .  
+Code can be found here [week5_homework.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/homework/week5_homework.ipynb).  
 
 ```python
 spark.sql("""
@@ -51,7 +51,9 @@ Output: **452470**
 
 Now calculate the duration for each trip.
 
-Trip starting on which day was the longest? 
+Trip starting on which day was the longest?  
+
+Code can be found here [week5_homework.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/homework/week5_homework.ipynb).  
 
 ```python
 spark.sql("""
@@ -75,7 +77,9 @@ How many stages this spark job has?
 
 > Note: the answer may depend on how you write the query,
 > so there are multiple correct answers. 
-> Select the one you have.
+> Select the one you have.  
+
+Code can be found here [week5_homework.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/homework/week5_homework.ipynb).  
 
 ```python
 spark.sql("""
@@ -105,6 +109,8 @@ For example:
 Enter two zone names separated by a slash
 
 If any of the zone names are unknown (missing), use "Unknown". For example, "Unknown / Clinton East".  
+
+Code can be found here [week5_homework.ipynb](https://github.com/TylerJSimpson/data_engineering_zoomcamp/blob/main/week_5/homework/week5_homework.ipynb).  
 
 ```python
 spark.sql("""
