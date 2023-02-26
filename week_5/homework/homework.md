@@ -97,6 +97,9 @@ localhost:4040/jobs
 Stage 1 had 7 tasks.  
 Stage 2 had 1 task (7 skipped)  
 
+**New Question 5: User Interface**  
+**Spark's UI is on local port 4040**  
+
 
 ## Question 6. Most common locations pair
 
@@ -123,3 +126,16 @@ ORDER   BY 2 DESC
 """).show(5,truncate=False)
 ```
 Output: **East New York/East New York** with count 47926
+
+**New Question 6: Most frequent pickup location zone**  
+**Output: Crown Heights North with count 231279**  
+```python
+spark.sql("""
+SELECT  DISTINCT(PU_Zone) AS PU_Zone,
+        COUNT(PU_Zone) AS Count
+FROM    fhvhv_2021_06_result 
+GROUP   BY 1
+ORDER   BY 2 DESC
+;
+""").show(5,truncate=False)
+```
