@@ -6,4 +6,5 @@
 * **[Week 3](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_3)** - **Data Warehousing** (BigQuery)
 * **[Week 4](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_4)** - **Analytics Engineering** (dbt, BigQuery, Looker)
 * **[Week 5](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_5)** - **Batch Processing** (Spark)  
+* **[Week 6](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_6)** - **Stream Processing** (Kafka)  
 ### Final Project
