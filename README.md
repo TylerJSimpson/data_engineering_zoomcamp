@@ -8,3 +8,4 @@
 * **[Week 5](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_5)** - **Batch Processing** (Spark)  
 * **[Week 6](https://github.com/TylerJSimpson/data_engineering_zoomcamp/tree/main/week_6)** - **Stream Processing** (Kafka)  
 ### Final Project
+See my separate repository for my [personal project here](https://github.com/TylerJSimpson/personal_project_clinicaltrials_2023)
